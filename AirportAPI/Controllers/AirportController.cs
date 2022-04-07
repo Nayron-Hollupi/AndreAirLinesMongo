@@ -1,0 +1,110 @@
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using AeroportoAPI.Service;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Model;
+using Service;
+
+namespace AirportAPI.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class AirportController : ControllerBase
+    {
+        private readonly AirportService _airportService;
+
+
+        public AirportController(AirportService aiportService)
+        {
+            _airportService = aiportService;
+        }
+
+        [HttpGet]
+        public ActionResult<List<Airport>> Get() =>
+            _airportService.Get();
+
+
+        [HttpGet("{id:length(24)}", Name = "GetAirport")]
+        public ActionResult<Airport> Get(string id)
+        {
+            var airport = _airportService.Get(id);
+
+            if (airport == null)
+            {
+                return NotFound();
+            }
+
+            return airport;
+        }
+
+
+        [HttpGet("{CodeIATA}", Name = "GetCodeIATA")]
+        public ActionResult<Airport> GetAirportCodeIATA(string CodeIATA)
+        {
+            var airport = _airportService.GetCodeIATA(CodeIATA);
+
+            if (airport == null)
+                return NotFound("Aiport no Exist");
+
+            return airport;
+        }
+    
+
+        [HttpPost]
+        public async Task<ActionResult<Airport>> Create(Airport airport)
+        {
+            var code = _airportService.VerifyCodigoIATA(airport.CodeIATA, airport.Address.CEP);
+            
+            
+
+            if (code == null )
+            {
+                var address = await ServiceCep.CorreioApi(airport.Address.CEP);
+
+                if (address != null)
+                {
+                    airport.Address = address;
+                }
+                _airportService.Create(airport);
+            }
+            else
+            {
+                return Conflict("Aeroporto  já cadastrado!!");
+            }
+           
+
+            return CreatedAtRoute("GetAirport", new { Id = airport.Id.ToString() }, airport);
+        }
+
+        [HttpPut("{id:length(24)}")]
+        public IActionResult Update(string id, Airport airportIn)
+        {
+            var airport = _airportService.Get(id);
+
+            if (airport == null)
+            {
+                return NotFound();
+            }
+
+            _airportService.Update(id, airportIn);
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id:length(24)}")]
+        public IActionResult Delete(string id)
+        {
+            var airport = _airportService.Get(id);
+
+            if (airport == null)
+            {
+                return NotFound();
+            }
+
+            _airportService.Remove(airport.Id);
+
+            return NoContent();
+        }
+    }
+}
