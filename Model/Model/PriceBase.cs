@@ -15,8 +15,6 @@ namespace Model
         public virtual Airport Origin { get; set; }  
         public  virtual Airport Destination { get; set; }     
         public decimal Value { get; set; }
-        public double PercentPromotion { get; set; }
-        public  virtual Class Class { get; set; }
         public DateTime InclusionDate {get; set;}
         #endregion
     }

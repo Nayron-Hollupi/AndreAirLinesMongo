@@ -23,13 +23,10 @@ namespace AircraftAPI.Service
 
         public List<Aircraft> Get() =>
        _aircraft.Find(aircraft => true).ToList();
-
         public Aircraft Get(string id) =>
             _aircraft.Find<Aircraft>(aircraft => aircraft.Id == id).FirstOrDefault();
-
         public Aircraft CheckRegistro(string Registry) =>
             _aircraft.Find<Aircraft>(aircraft => aircraft.Registry == Registry).FirstOrDefault();
-
         public Aircraft Create(Aircraft aircraft)
         {
             _aircraft.InsertOne(aircraft);

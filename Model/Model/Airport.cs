@@ -13,6 +13,7 @@ namespace Model
         public string CodeIATA { get; set; }
         public string Name { get; set; }
         public Address Address { get; set; }
+        public string LoginUser { get; set; }
 
         #endregion  
 
