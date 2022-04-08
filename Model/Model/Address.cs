@@ -8,7 +8,10 @@ namespace Model
     public class Address
     {
         #region Propertiebairs
-     
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; }
+        public string Country { get; set; }
         [JsonProperty("cep")]
         public string CEP { get; set; }
         [JsonProperty("bairro")]

@@ -2,6 +2,7 @@
 using Model;
 using MongoDB.Driver;
 using FlightsAPI.Utils;
+using System;
 
 namespace FlightsAPI.Service
 {
@@ -23,8 +24,23 @@ namespace FlightsAPI.Service
 
         public Flights Create(Flights fight)
         {
-            _fight.InsertOne(fight);
+
+
+            if (fight.Destination.CodeIATA != fight.Origin.CodeIATA)
+            {
+                _fight.InsertOne(fight);
+            }
+            else
+            {
+                return Conflict("Origem e Destino não podem ser iguais");
+            }
+           
             return fight;
+        }
+
+        private Flights Conflict(string v)
+        {
+            throw new NotImplementedException();
         }
 
         public void Update(string id, Flights fightIn) =>

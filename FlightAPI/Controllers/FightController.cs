@@ -39,17 +39,9 @@ namespace FlightsAPI.Controllers
         [HttpPost]
         public ActionResult<Flights> Create(Flights fight)
         {
-
-            if(fight.Destination == fight.Origin)
-            {
                 _fightService.Create(fight);
-            }
-            else
-            {
-                return Conflict("Origem e Destino não podem ser iguais");
-            }
-            
-
+           
+           
             return CreatedAtRoute("GetFight", new { Id = fight.Id.ToString() }, fight);
         }
 

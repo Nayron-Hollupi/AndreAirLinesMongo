@@ -25,7 +25,7 @@ namespace AircraftAPI.Controllers
 
 
         [HttpGet("{id:length(24)}", Name = "GetAircraft")]
-        public async  Task<ActionResult<Aircraft>> Get(string id)
+        public async  Task<ActionResult<Model.Aircraft>> Get(string id)
         {
             var aircraft =  _aircraftService.Get(id);
 
@@ -49,7 +49,7 @@ namespace AircraftAPI.Controllers
             }
             else
             {
-                return Conflict("Já existe uma aeronave com esse registro cadastrada");
+                return Conflict("Já existe uma aeronave com esse registro cadastrada?");
             }
           
 

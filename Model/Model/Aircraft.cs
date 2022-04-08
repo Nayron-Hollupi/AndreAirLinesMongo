@@ -14,10 +14,7 @@ namespace Model
         public string Registry { get; set; }
         public string Name { get; set; }
         public int Capacity { get; set; }
-
-        public Aircraft()
-        {
-        }
+        public string LoginUser { get; set; }
 
         #endregion
     }
