@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Model;
@@ -21,11 +22,13 @@ namespace PriceBaseAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "employee,manager")]
         public ActionResult<List<PriceBase>> Get() =>
             _priceBaseService.Get();
 
 
         [HttpGet("{id:length(24)}", Name = "GetPriceBase")]
+        [Authorize(Roles = "employee,manager")]
         public ActionResult<PriceBase> Get(string id)
         {
             var priceBase = _priceBaseService.Get(id);
@@ -39,6 +42,7 @@ namespace PriceBaseAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "manager")]
         public async Task<ActionResult<PriceBase>> CreateAsync(PriceBase priceBase)
         {
               
@@ -67,6 +71,7 @@ namespace PriceBaseAPI.Controllers
         }
 
         [HttpPut("{id:length(24)}")]
+        [Authorize(Roles = "manager")]
         public IActionResult Update(string id, PriceBase priceBaseIn)
         {
             var priceBase = _priceBaseService.Get(id);
@@ -82,6 +87,7 @@ namespace PriceBaseAPI.Controllers
         }
 
         [HttpDelete("{id:length(24)}")]
+        [Authorize(Roles = "manager")]
         public IActionResult Delete(string id)
         {
             var priceBase = _priceBaseService.Get(id);

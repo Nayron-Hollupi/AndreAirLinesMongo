@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Model;
 using FlightsAPI.Service;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FlightsAPI.Controllers
 {
@@ -19,11 +20,13 @@ namespace FlightsAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "employee,manager")]
         public ActionResult<List<Flights>> Get() =>
             _fightService.Get();
 
 
         [HttpGet("{id:length(24)}", Name = "GetFight")]
+        [Authorize(Roles = "employee,manager")]
         public ActionResult<Flights> Get(string id)
         {
             var fight = _fightService.Get(id);
@@ -37,6 +40,7 @@ namespace FlightsAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "employee,manager")]
         public ActionResult<Flights> Create(Flights fight)
         {
                 _fightService.Create(fight);
@@ -46,6 +50,7 @@ namespace FlightsAPI.Controllers
         }
 
         [HttpPut("{id:length(24)}")]
+        [Authorize(Roles = "employee,manager")]
         public IActionResult Update(string id, Flights fightIn)
         {
             var fight = _fightService.Get(id);
@@ -61,6 +66,7 @@ namespace FlightsAPI.Controllers
         }
 
         [HttpDelete("{id:length(24)}")]
+        [Authorize(Roles = "employee,manager")]
         public IActionResult Delete(string id)
         {
             var fight = _fightService.Get(id);

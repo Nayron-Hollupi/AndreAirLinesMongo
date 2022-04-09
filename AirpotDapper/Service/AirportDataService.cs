@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using AirportDapper.Repository;
-using Model.Model;
+using Model;
+
 
 namespace AirportDapper.Service
 {

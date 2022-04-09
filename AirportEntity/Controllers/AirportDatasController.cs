@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AirportEntity.Data;
-using Model.Model;
-
+using Model;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AirportEntity.Controllers
 {
@@ -24,6 +24,7 @@ namespace AirportEntity.Controllers
 
         // GET: api/AirportDatas
         [HttpGet]
+        [Authorize(Roles = "employee,manager")]
         public async Task<ActionResult<IEnumerable<AirportData>>> GetAirportData()
         {
             return await _context.AirportData.ToListAsync();
@@ -46,6 +47,7 @@ namespace AirportEntity.Controllers
         // PUT: api/AirportDatas/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> PutAirportData(int id, AirportData airportData)
         {
             if (id != airportData.Id)

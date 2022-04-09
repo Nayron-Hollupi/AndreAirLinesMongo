@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AeroportoAPI.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Model;
@@ -21,11 +22,13 @@ namespace AirportAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "employee,manager")]
         public ActionResult<List<Airport>> Get() =>
             _airportService.Get();
 
 
         [HttpGet("{id:length(24)}", Name = "GetAirport")]
+        [Authorize(Roles = "employee,manager")]
         public ActionResult<Airport> Get(string id)
         {
             var airport = _airportService.Get(id);
@@ -40,6 +43,7 @@ namespace AirportAPI.Controllers
 
 
         [HttpGet("{CodeIATA}", Name = "GetCodeIATA")]
+        [Authorize(Roles = "employee,manager")]
         public ActionResult<Airport> GetAirportCodeIATA(string CodeIATA)
         {
             var airport = _airportService.GetCodeIATA(CodeIATA);
@@ -52,6 +56,7 @@ namespace AirportAPI.Controllers
     
 
         [HttpPost]
+        [Authorize(Roles = "manager")]
         public async Task<ActionResult<Airport>> Create(Airport airport)
         {
             var code = _airportService.VerifyCodigoIATA(airport.CodeIATA, airport.Address.CEP);
@@ -78,6 +83,7 @@ namespace AirportAPI.Controllers
         }
 
         [HttpPut("{id:length(24)}")]
+        [Authorize(Roles = "manager")]
         public IActionResult Update(string id, Airport airportIn)
         {
             var airport = _airportService.Get(id);
@@ -93,6 +99,7 @@ namespace AirportAPI.Controllers
         }
 
         [HttpDelete("{id:length(24)}")]
+        [Authorize(Roles = "manager")]
         public IActionResult Delete(string id)
         {
             var airport = _airportService.Get(id);

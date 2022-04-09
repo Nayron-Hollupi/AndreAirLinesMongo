@@ -7,35 +7,35 @@ namespace PassengerAPI.Service
 {
     public class PassengerService 
     {
-        private readonly IMongoCollection<Passenger> _passenger;
+        private readonly IMongoCollection<User> _passenger;
 
         public PassengerService(IPassengerUtilsDatabaseSettings settings)
         {
             var passenge = new MongoClient(settings.ConnectionString);
             var database = passenge.GetDatabase(settings.DatabaseName);
-            _passenger = database.GetCollection<Passenger>(settings.PassengerCollectionName);
+            _passenger = database.GetCollection<User>(settings.PassengerCollectionName);
         }
 
-        public List<Passenger> Get() =>
+        public List<User> Get() =>
        _passenger.Find(passenger => true).ToList();
-        public Passenger Get(string id) =>
-            _passenger.Find<Passenger>(passenger => passenger.Id == id).FirstOrDefault();
+        public User Get(string id) =>
+            _passenger.Find<User>(passenger => passenger.Id == id).FirstOrDefault();
 
-        public Passenger ExistCPF(string CPF) =>
-            _passenger.Find<Passenger>(passenger => passenger.CPF == CPF).FirstOrDefault();
+        public User ExistCPF(string CPF) =>
+            _passenger.Find<User>(passenger => passenger.CPF == CPF).FirstOrDefault();
 
 
-        public Passenger Create(Passenger passenger)
+        public User Create(User passenger)
         {
 
             _passenger.InsertOne(passenger);
             return passenger;
         }
 
-        public void Update(string id, Passenger passengerIn) =>
+        public void Update(string id, User passengerIn) =>
             _passenger.ReplaceOne(passenger => passenger.Id == id, passengerIn);
 
-        public void Remove(Passenger passengerIn) =>
+        public void Remove(User passengerIn) =>
             _passenger.DeleteOne(passenger => passenger.Id == passengerIn.Id);
 
         public void Remove(string id) =>

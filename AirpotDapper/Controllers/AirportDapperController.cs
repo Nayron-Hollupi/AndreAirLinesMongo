@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AirportDapper.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Model.Model;
+using Model;
+
 
 namespace AirportDapper.Controllers
 {
@@ -21,12 +23,14 @@ namespace AirportDapper.Controllers
             }
 
             [HttpGet]
-            public ActionResult<List<AirportData>> Get() =>
+        [Authorize(Roles = "employee,manager")]
+        public ActionResult<List<AirportData>> Get() =>
                 _airportDataService.GetAll();
 
 
-            [HttpPost]
-            public async Task<ActionResult<AirportData>> Create(AirportData airportData)
+            [HttpPost  ]
+        [Authorize(Roles = "manager")]
+        public async Task<ActionResult<AirportData>> Create(AirportData airportData)
             {
                                            
                     _airportDataService.Add(airportData);

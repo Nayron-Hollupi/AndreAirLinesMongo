@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AeroportoAPI.Service;
 using AirportAPI.Utils;
+using AuthenticationAPI;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -29,14 +30,38 @@ namespace AirportAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddServicesToken();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "AirportAPI", Version = "v1" });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header
+
+
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                   {
+                        new OpenApiSecurityScheme
+                          {
+                              Reference = new OpenApiReference
+                              {
+                                  Type = ReferenceType.SecurityScheme,
+                                  Id = "Bearer"
+                              }
+                          },
+                          new string []{}
+                    }
+                    });
             });
             services.Configure<AirportUtilsDatabaseSettings>(
-Configuration.GetSection(nameof(AirportUtilsDatabaseSettings)));
+            Configuration.GetSection(nameof(AirportUtilsDatabaseSettings)));
 
             services.AddSingleton<IAirportUtilsDatabaseSettings>(sp =>
                 sp.GetRequiredService<IOptions<AirportUtilsDatabaseSettings>>().Value);
@@ -58,7 +83,9 @@ Configuration.GetSection(nameof(AirportUtilsDatabaseSettings)));
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
+
 
             app.UseEndpoints(endpoints =>
             {
