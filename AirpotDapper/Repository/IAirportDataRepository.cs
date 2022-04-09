@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Model.Model;
+using Model;
 
 namespace AirportDapper.Repository
 {

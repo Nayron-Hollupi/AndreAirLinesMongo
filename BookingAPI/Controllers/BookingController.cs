@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Model;
 using BookingAPI.Service;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BookingAPI.Controllers
 {
@@ -19,11 +20,13 @@ namespace BookingAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "employee,manager")]
         public ActionResult<List<Booking>> Get() =>
             _bookingService.Get();
 
 
         [HttpGet("{id:length(24)}", Name = "GetBooking")]
+        [Authorize(Roles = "employee,manager")]
         public ActionResult<Booking> Get(string id)
         {
             var booking = _bookingService.Get(id);
@@ -37,6 +40,7 @@ namespace BookingAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "manager")]
         public ActionResult<Booking> Create(Booking booking)
         {
             _bookingService.Create(booking);
@@ -45,6 +49,7 @@ namespace BookingAPI.Controllers
         }
 
         [HttpPut("{id:length(24)}")]
+        [Authorize(Roles = "manager")]
         public IActionResult Update(string id, Booking bookingIn)
         {
             var booking = _bookingService.Get(id);
@@ -60,6 +65,7 @@ namespace BookingAPI.Controllers
         }
 
         [HttpDelete("{id:length(24)}")]
+        [Authorize(Roles = "manager")]
         public IActionResult Delete(string id)
         {
             var booking = _bookingService.Get(id);

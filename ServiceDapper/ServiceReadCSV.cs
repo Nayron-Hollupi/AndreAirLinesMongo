@@ -2,7 +2,7 @@
 using System.IO;
 using AirportDapper.Service;
 using AirportEntity.Controllers;
-using Model.Model;
+using Model;
 
 namespace ServiceDapper
 {

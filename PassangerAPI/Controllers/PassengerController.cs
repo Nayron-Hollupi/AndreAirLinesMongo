@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Model;
@@ -21,12 +22,14 @@ namespace PassengerAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<Passenger>> Get() =>
+        [Authorize(Roles = "employee,manager")]
+        public ActionResult<List<User>> Get() =>
             _passengerService.Get();
 
 
         [HttpGet("{id:length(24)}", Name = "GetPassenger")]
-        public ActionResult<Passenger> Get(string id)
+        [Authorize(Roles = "employee,manager")]
+        public ActionResult<User> Get(string id)
         {
             var passenger = _passengerService.Get(id);
 
@@ -39,7 +42,8 @@ namespace PassengerAPI.Controllers
         }
 
         [HttpPost]
-        public  async Task<ActionResult<Passenger>> Create(Passenger passenger)
+        [Authorize(Roles = "employee,manager")]
+        public  async Task<ActionResult<User>> Create(User passenger)
         {
             var cpf = _passengerService.ExistCPF(passenger.CPF);
             var check = _passengerService.CheckCpf(passenger.CPF);
@@ -72,7 +76,8 @@ namespace PassengerAPI.Controllers
         }
 
         [HttpPut("{id:length(24)}")]
-        public IActionResult Update(string id, Passenger passengerIn)
+        [Authorize(Roles = "employee,manager")]
+        public IActionResult Update(string id, User passengerIn)
         {
             var passenger = _passengerService.Get(id);
 
@@ -87,6 +92,7 @@ namespace PassengerAPI.Controllers
         }
 
         [HttpDelete("{id:length(24)}")]
+        [Authorize(Roles = "manager")]
         public IActionResult Delete(string id)
         {
             var passenger = _passengerService.Get(id);
