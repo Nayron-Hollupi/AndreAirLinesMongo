@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Model;
 using PassengerAPI.Service;
-using ServerCEP;
+using Service;
 
 namespace PassengerAPI.Controllers
 {

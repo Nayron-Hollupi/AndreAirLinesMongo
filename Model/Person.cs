@@ -8,7 +8,8 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Model
 {
-   public abstract class Person
+   public class Person
+
     {
 
         #region Properties
@@ -21,7 +22,7 @@ namespace Model
         public DateTime BirthDate { get; set; }
         public string Email { get; set; }
         public virtual Address Address { get; set; }
-        public string LoginUser { get; set; }
+
 
         #endregion
     }

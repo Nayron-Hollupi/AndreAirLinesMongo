@@ -10,6 +10,7 @@ using MongoDB.Bson.Serialization.Attributes;
 namespace Model
 {
     public class User : Person
+
     {
         #region Properties
         public string Password { get; set; }

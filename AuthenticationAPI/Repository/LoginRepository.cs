@@ -1,23 +1,39 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using AuthenticationAPI.Models;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Model;
+using ServicesUser;
+using UserAPI.Service;
 
 namespace AuthenticationAPI.Repository
 {
     public class LoginRepository
     {
-        public static User Get(string userName, string password)
+    
+        public async Task<ActionResult<User>> Get(string login, string password)
         {
-            var users = new List<User>
+            var user = await ServiceSeachUser.SeachUserAuth(login);        
+
+            if (user != null)
             {
-               new () { Id= "1", UserName = "Nayron", Password = "123456", Role = "manager" },
-               new () { Id= "2", UserName = "Daiane", Password = "654321", Role = "employee" }
+                var users = new List<User>
+            {
+               new () { Id= "1", Login = user.Login, Password = user.Password, Role = user.Role },
             };
 
-            return users
-            .FirstOrDefault(x => x.UserName == userName && x.Password == password);
+                return users
+                .FirstOrDefault(x => x.Login == login && x.Password == password);
 
-        
+            }
+            else
+            {
+                return null;
+            }
+          
+                
+            
         }
     }
 }
