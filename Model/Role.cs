@@ -8,14 +8,12 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Model
 {
-   public class Role
+   public class Role 
     {
         #region Properties
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public int Id { get; set; }
+    
         public string Description { get; set; }
-        public  List<Access> Access  { get; set; }
+      //  public  Access Access  { get; set; }
         #endregion
     }
 }

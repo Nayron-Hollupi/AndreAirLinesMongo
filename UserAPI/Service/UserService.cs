@@ -21,13 +21,17 @@ namespace UserAPI.Service
         public User Get(string id) =>
             _user.Find<User>(user => user.Id == id).FirstOrDefault();
 
+        ///public static  User GetAuth(string Name, string Password) =>
+         //  _user.Find<User>(user => user.Name == Name && user.Password == Password).FirstOrDefault();
+
         public User ExistCPF(string CPF) =>
             _user.Find<User>(user => user.CPF == CPF).FirstOrDefault();
 
+        public User GetLogin(string Login) =>
+         _user.Find<User>(user => user.Login == Login).FirstOrDefault();
 
         public User Create(User user)
         {
-
             _user.InsertOne(user);
             return user;
         }

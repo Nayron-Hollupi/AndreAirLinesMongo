@@ -12,6 +12,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Model\Model.csproj" />
+    <ProjectReference Include="..\ServicesUser\ServicesUser.csproj" />
+    <ProjectReference Include="..\UserAPI\UserAPI.csproj" />
   </ItemGroup>
 
 </Project>

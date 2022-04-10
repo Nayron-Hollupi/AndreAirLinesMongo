@@ -2,17 +2,19 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using AuthenticationAPI.Models;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Model;
 
 namespace AuthenticationAPI
 {
     public static class ServiceToken
     {
-        public static string GenerateToken(User user)
+        public static ActionResult<string>  GenerateToken(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var Key = Encoding.ASCII.GetBytes(Settings.Secret);
@@ -21,8 +23,8 @@ namespace AuthenticationAPI
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim(ClaimTypes.NameIdentifier, user.Id),
-                    new Claim(ClaimTypes.Name, user.UserName),
-                    new Claim(ClaimTypes.Role, user.Role)
+                    new Claim(ClaimTypes.Name, user.Login),
+                    new Claim(ClaimTypes.Role, user.Role.Description)
                 }),
                 Expires = DateTime.UtcNow.AddHours(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Key), SecurityAlgorithms.HmacSha256Signature)
@@ -30,6 +32,8 @@ namespace AuthenticationAPI
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
+
+       
 
         public static void AddServicesToken(this IServiceCollection services)
         {

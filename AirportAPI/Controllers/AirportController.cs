@@ -71,7 +71,7 @@ namespace AirportAPI.Controllers
                 {
                     airport.Address = address;
                 }
-                _airportService.Create(airport);
+              await  _airportService.Create(airport);
             }
             else
             {

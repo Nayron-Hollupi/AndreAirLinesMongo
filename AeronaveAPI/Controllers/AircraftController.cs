@@ -66,7 +66,7 @@ namespace AircraftAPI.Controllers
         {
             var aircraft = _aircraftService.Get(id);
 
-          var key =  LoginController.Authenticate(User);
+  
 
             if (aircraft == null)
             {

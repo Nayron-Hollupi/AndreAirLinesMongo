@@ -1,10 +1,12 @@
 ﻿using System.Security.Claims;
 using System.Threading.Tasks;
-using AuthenticationAPI.Models;
+
 using AuthenticationAPI.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
+using Model;
+using ServicesUser;
+using UserAPI.Service;
 
 namespace AuthenticationAPI.Controllers
 {
@@ -18,7 +20,35 @@ namespace AuthenticationAPI.Controllers
             public async Task<ActionResult<dynamic>> Authenticate(User model)
             {
 
-               var user = LoginRepository.Get(model.UserName, model.Password);
+
+            var user = await ServiceSeachUser.SeachUserAuth(model.Login); 
+
+            if (user != null)
+            {
+                if (user.Login == model.Login && user.Password == model.Password)
+                {
+                    var token = ServiceToken.GenerateToken(user);
+
+                    user.Password = "";
+
+                    return new
+                    {
+                        //user = user,
+                        token = token
+                    };
+                }
+                else
+                {
+                    return NotFound(new { message = "User or password invalidade!!" });
+                }
+
+            }
+            else
+            {
+                return NotFound(new { message = "User does not exist !!" });
+            }
+            /*
+               var user = UserService.GetAuth(model.Name, model.Password);
 
                 if (user == null)
                     return NotFound(new { message = "User or password invalidade!!" });
@@ -31,10 +61,10 @@ namespace AuthenticationAPI.Controllers
                 {
                     user = user,
                     token = token
-                };
-            }
+                };*/
+        }
 
-
+        /*
             [HttpGet]
             [Route("anonymous")]
             [AllowAnonymous]
@@ -57,11 +87,8 @@ namespace AuthenticationAPI.Controllers
             [Route("manager")]
             [Authorize(Roles = "manager")]
             public string Manager() => "Gerente";
+        */
 
-        public static Task Authenticate(ClaimsPrincipal user)
-        {
-            throw new System.NotImplementedException();
-        }
     }
     }
 
