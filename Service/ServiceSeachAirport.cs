@@ -15,9 +15,11 @@ namespace Service
 
         public static async Task<Airport> SeachAirport(string CodeIATA)
         {
+
+
             try
             {
-                HttpResponseMessage response = await airport.GetAsync("https://localhost:44398/api/Airport/" + CodeIATA);
+                HttpResponseMessage response = await airport.GetAsync("https://localhost:44398/api/Airport/" + CodeIATA.ToUpper());
                 response.EnsureSuccessStatusCode();
                 string responseBody = await response.Content.ReadAsStringAsync();
                 var airportJson = JsonConvert.DeserializeObject<Airport>(responseBody);

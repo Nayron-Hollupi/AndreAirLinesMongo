@@ -43,7 +43,7 @@ namespace AirportAPI.Controllers
 
 
         [HttpGet("{CodeIATA}", Name = "GetCodeIATA")]
-        [Authorize(Roles = "employee,manager")]
+        [AllowAnonymous]
         public ActionResult<Airport> GetAirportCodeIATA(string CodeIATA)
         {
             var airport = _airportService.GetCodeIATA(CodeIATA);
