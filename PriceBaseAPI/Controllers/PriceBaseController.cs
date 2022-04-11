@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Model;
@@ -9,6 +10,7 @@ using Service;
 
 namespace PriceBaseAPI.Controllers
 {
+    [EnableCors("AnotherPolicy")]
     [Route("api/[controller]")]
     [ApiController]
     public class PriceBaseController : ControllerBase
@@ -22,6 +24,7 @@ namespace PriceBaseAPI.Controllers
         }
 
         [HttpGet]
+       
         [Authorize(Roles = "employee,manager")]
         public ActionResult<List<PriceBase>> Get() =>
             _priceBaseService.Get();
@@ -49,11 +52,15 @@ namespace PriceBaseAPI.Controllers
             var origin = await ServiceSeachAirport.SeachAirport(priceBase.Origin.CodeIATA);
             var Destination = await ServiceSeachAirport.SeachAirport(priceBase.Destination.CodeIATA);
 
+            
+           
+
             if (origin != null && Destination != null)
             {
                 if (origin.CodeIATA != Destination.CodeIATA)
                 {
-
+                    priceBase.Destination = Destination;
+                    priceBase.Origin = origin;
                     _priceBaseService.Create(priceBase);
                 }
                 else

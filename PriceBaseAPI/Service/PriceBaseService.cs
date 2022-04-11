@@ -24,7 +24,7 @@ namespace PriceBaseAPI.Service
 
  
         public PriceBase Create(PriceBase priceBase)
-        {
+        {    
             _priceBase.InsertOne(priceBase);
             return priceBase;
         }

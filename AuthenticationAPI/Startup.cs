@@ -39,8 +39,8 @@ namespace AuthenticationAPI
             {
                
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "AuthenticationAPI", Version = "v1" });
-
-                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+            
+            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
                 {
                     Name = "Authorization",
                     Type = SecuritySchemeType.ApiKey,

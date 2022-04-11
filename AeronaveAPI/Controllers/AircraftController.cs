@@ -3,12 +3,14 @@ using System.Threading.Tasks;
 using AircraftAPI.Service;
 using AuthenticationAPI.Controllers;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Model;
 
 namespace AircraftAPI.Controllers
 {
+    [EnableCors]
     [Route("api/[controller]")]
     [ApiController]
     public class AircraftController : ControllerBase
