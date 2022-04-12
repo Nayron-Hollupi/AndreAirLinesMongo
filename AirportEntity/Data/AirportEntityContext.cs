@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Model.Model;
+using Model;
 
 namespace AirportEntity.Data
 {
@@ -14,6 +14,6 @@ namespace AirportEntity.Data
         {
         }
 
-        public DbSet<Model.Model.AirportData> AirportData { get; set; }
+        public DbSet<AirportData> AirportData { get; set; }
     }
 }

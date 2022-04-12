@@ -4,7 +4,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Model
 {
-    public class Class
+    public class TypeClass
     {
         #region Properties
         [BsonId]

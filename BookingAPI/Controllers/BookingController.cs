@@ -4,6 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using Model;
 using BookingAPI.Service;
 using Microsoft.AspNetCore.Authorization;
+using ServicePassenger;
+using System.Threading.Tasks;
+using ServiceFlight;
+using ServiceClass;
+using ServicePriceBase;
 
 namespace BookingAPI.Controllers
 {
@@ -41,11 +46,36 @@ namespace BookingAPI.Controllers
 
         [HttpPost]
         [Authorize(Roles = "manager")]
-        public ActionResult<Booking> Create(Booking booking)
+        public async Task<ActionResult<Booking>> Create(Booking booking)
         {
-            _bookingService.Create(booking);
+            var flight = await ServiceSeachFlight.SeachFlights(booking.Flights.Destination.CodeIATA, booking.Flights.Origin.CodeIATA);
+            var priceBase = await ServiceSeachPriceBase.SeachPriceBase(booking.Flights.Destination.CodeIATA, booking.Flights.Origin.CodeIATA);
+            var passenger = await ServiceSeachPassenger.SeachPassenger(booking.Passenger.CodePassenger);
+            var typeClass = await ServiceSeachClass.SeachTypeClass(booking.TypeClass.Description);
+            
+           
 
-            return CreatedAtRoute("GetBooking", new { Id = booking.Id.ToString() }, booking);
+            if(booking.Flights != null && booking.Passenger != null && booking.TypeClass != null)
+            {
+
+                booking.Flights = flight;
+                booking.Passenger = passenger;
+                booking.TypeClass = typeClass;
+                booking.Value = priceBase.Value + (priceBase.Value * typeClass.Value);
+                booking.Value = booking.Value - (booking.Value * booking.PercentPromotion);
+
+                _bookingService.Create(booking);
+                return CreatedAtRoute("GetBooking", new { Id = booking.Id.ToString() }, booking);
+
+            }
+            else
+            {
+                return Conflict("service unavailable.");
+            }
+
+           
+
+           
         }
 
         [HttpPut("{id:length(24)}")]

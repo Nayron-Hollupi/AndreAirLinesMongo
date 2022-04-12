@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Model;
 using FlightsAPI.Service;
 using Microsoft.AspNetCore.Authorization;
+using Service;
+using ServicceAircraft;
+using System.Threading.Tasks;
+using ServicePassenger;
 
 namespace FlightsAPI.Controllers
 {
@@ -25,28 +28,67 @@ namespace FlightsAPI.Controllers
             _fightService.Get();
 
 
-        [HttpGet("{id:length(24)}", Name = "GetFight")]
+        [HttpGet("{id:length(24)}", Name = "GetFlight")]
         [Authorize(Roles = "employee,manager")]
         public ActionResult<Flights> Get(string id)
         {
-            var fight = _fightService.Get(id);
+            var flight = _fightService.Get(id);
 
-            if (fight == null)
+            if (flight == null)
             {
                 return NotFound();
             }
 
-            return fight;
+            return flight;
         }
 
+        [HttpGet("{Origin}/{Destination}" , Name = "GetFlightBooking")]
+        public async Task<ActionResult<Flights>> GetBookingFlights(string destination, string origin)
+        {
+            var flight = _fightService.GetBooking(destination, origin);
+
+            if (flight == null)
+            {
+                return NotFound();
+            }
+
+            return flight;
+        }
+       
         [HttpPost]
         [Authorize(Roles = "employee,manager")]
-        public ActionResult<Flights> Create(Flights fight)
+        public  async Task<ActionResult<Flights>> Create(Flights flight)
         {
-                _fightService.Create(fight);
-           
-           
-            return CreatedAtRoute("GetFight", new { Id = fight.Id.ToString() }, fight);
+            var destination =  await ServiceSeachAirport.SeachAirport(flight.Destination.CodeIATA);
+            var origin = await ServiceSeachAirport.SeachAirport(flight.Origin.CodeIATA);
+            var aircraft = await ServiceSeachAircraft.SeachAircraft(flight.Aircraft.Registry);
+          
+
+            flight.Destination = destination;
+            flight.Origin = origin;
+            flight.Aircraft = aircraft;
+;
+
+            if (origin != null && destination != null && aircraft != null)
+            {
+                if (origin.CodeIATA != destination.CodeIATA)
+                {
+                    flight.Destination = destination;
+                    flight.Origin = origin;
+                    flight.Aircraft = aircraft;
+                    _fightService.Create(flight);
+                }
+                else
+                {
+                    return Conflict("A origem e destino não pode ser iguais.");
+                }
+            }
+            else
+            {
+                return Conflict("Serviço indisponivel no momento.");
+            }
+
+            return CreatedAtRoute("GetFight", new { Id = flight.Id.ToString() }, flight);
         }
 
         [HttpPut("{id:length(24)}")]

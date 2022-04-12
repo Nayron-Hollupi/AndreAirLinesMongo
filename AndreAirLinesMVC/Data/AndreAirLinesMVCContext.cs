@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using AuthenticationAPI.Models;
+
 using Model;
 
 namespace AndreAirLinesMVC.Data
@@ -15,7 +15,7 @@ namespace AndreAirLinesMVC.Data
         {
         }
 
-        public DbSet<AuthenticationAPI.Models.User> User { get; set; }
+        public DbSet<User> User { get; set; }
 
         public DbSet<Model.Aircraft> Aircraft { get; set; }
     }

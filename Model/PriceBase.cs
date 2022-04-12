@@ -14,7 +14,7 @@ namespace Model
         public string Id { get; set; }
         public virtual Airport Origin { get; set; }  
         public  virtual Airport Destination { get; set; }     
-        public decimal Value { get; set; }
+        public double Value { get; set; }
         public DateTime InclusionDate {get; set;}
         #endregion
     }

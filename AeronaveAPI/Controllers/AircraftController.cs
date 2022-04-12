@@ -24,7 +24,7 @@ namespace AircraftAPI.Controllers
         }
 
         [HttpGet]
-      [Authorize(Roles = "employee,manager")]
+     [Authorize(Roles = "employee,manager")]
         public async  Task<ActionResult<List<Aircraft>>> Get() =>
             _aircraftService.Get();
 
@@ -37,11 +37,25 @@ namespace AircraftAPI.Controllers
 
             if (aircraft == null)
             {
-                return Conflict("Não possui nenhuma Aeronave cadastrada com esse ID");  NotFound();
+                return Conflict("Não possui nenhuma Aeronave cadastrada com esse ID"); 
             }
 
             return aircraft;
         }
+
+
+        [HttpGet("{Registry}", Name = "GetRegistry")]
+        [AllowAnonymous]
+        public ActionResult<Aircraft> GetAirportRegistry(string Registry)
+        {
+            var aircraft = _aircraftService.GetRegistry(Registry);
+
+            if (aircraft == null)
+                return NotFound("Aircraft no Exist");
+
+            return aircraft;
+        }
+
 
         [HttpPost]
         [Authorize(Roles = "manager")]

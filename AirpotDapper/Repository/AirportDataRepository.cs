@@ -2,7 +2,8 @@
 using System.Data.SqlClient;
 using AirportDapper.Config;
 using Dapper;
-using Model.Model;
+using Model;
+
 
 namespace AirportDapper.Repository
 {

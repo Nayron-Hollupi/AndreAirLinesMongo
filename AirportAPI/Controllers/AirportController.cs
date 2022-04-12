@@ -59,18 +59,13 @@ namespace AirportAPI.Controllers
         [Authorize(Roles = "manager")]
         public async Task<ActionResult<Airport>> Create(Airport airport)
         {
-            var code = _airportService.VerifyCodigoIATA(airport.CodeIATA, airport.Address.CEP);
+            var code = _airportService.VerifyCodigoIATA(airport.CodeIATA, airport.AddressAirport.CEP);
             
             
 
             if (code == null )
             {
-                var address = await ServiceCep.CorreioApi(airport.Address.CEP);
-
-                if (address != null)
-                {
-                    airport.Address = address;
-                }
+                
               await  _airportService.Create(airport);
             }
             else

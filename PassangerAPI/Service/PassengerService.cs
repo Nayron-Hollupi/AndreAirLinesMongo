@@ -7,35 +7,38 @@ namespace PassengerAPI.Service
 {
     public class PassengerService 
     {
-        private readonly IMongoCollection<User> _passenger;
+        private readonly IMongoCollection<Passenger> _passenger;
 
         public PassengerService(IPassengerUtilsDatabaseSettings settings)
         {
             var passenge = new MongoClient(settings.ConnectionString);
             var database = passenge.GetDatabase(settings.DatabaseName);
-            _passenger = database.GetCollection<User>(settings.PassengerCollectionName);
+            _passenger = database.GetCollection<Passenger>(settings.PassengerCollectionName);
         }
 
-        public List<User> Get() =>
+        public List<Passenger> Get() =>
        _passenger.Find(passenger => true).ToList();
-        public User Get(string id) =>
-            _passenger.Find<User>(passenger => passenger.Id == id).FirstOrDefault();
+        public Passenger Get(string id) =>
+            _passenger.Find<Passenger>(passenger => passenger.Id == id).FirstOrDefault();
 
-        public User ExistCPF(string CPF) =>
-            _passenger.Find<User>(passenger => passenger.CPF == CPF).FirstOrDefault();
+        public Passenger GetCode(string code) =>
+            _passenger.Find<Passenger>(passenger => passenger.CodePassenger.ToUpper() == code.ToUpper()).FirstOrDefault();
+
+        public Passenger ExistCPF(string CPF) =>
+            _passenger.Find<Passenger>(passenger => passenger.CPF == CPF).FirstOrDefault();
 
 
-        public User Create(User passenger)
+        public Passenger Create(Passenger passenger)
         {
 
             _passenger.InsertOne(passenger);
             return passenger;
         }
 
-        public void Update(string id, User passengerIn) =>
+        public void Update(string id, Passenger passengerIn) =>
             _passenger.ReplaceOne(passenger => passenger.Id == id, passengerIn);
 
-        public void Remove(User passengerIn) =>
+        public void Remove(Passenger passengerIn) =>
             _passenger.DeleteOne(passenger => passenger.Id == passengerIn.Id);
 
         public void Remove(string id) =>

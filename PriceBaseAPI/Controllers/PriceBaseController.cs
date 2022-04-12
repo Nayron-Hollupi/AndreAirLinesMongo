@@ -44,22 +44,46 @@ namespace PriceBaseAPI.Controllers
             return priceBase;
         }
 
+
+
+
+        [HttpGet("{Origin}/{Destination}", Name = "GetPriceBaseBooking")]
+        public async Task<ActionResult<PriceBase>> GetBookingPrice(string destination, string origin)
+        {
+            var priceBase = _priceBaseService.GetBookingPriBase(destination, origin);
+
+            if (priceBase == null)
+            {
+                return NotFound();
+            }
+
+            return priceBase;
+        }
+
+
+
+
+
+
+
+
+
         [HttpPost]
         [Authorize(Roles = "manager")]
         public async Task<ActionResult<PriceBase>> CreateAsync(PriceBase priceBase)
         {
               
             var origin = await ServiceSeachAirport.SeachAirport(priceBase.Origin.CodeIATA);
-            var Destination = await ServiceSeachAirport.SeachAirport(priceBase.Destination.CodeIATA);
+            var destination = await ServiceSeachAirport.SeachAirport(priceBase.Destination.CodeIATA);
 
             
            
 
-            if (origin != null && Destination != null)
+            if (origin != null && destination != null)
             {
-                if (origin.CodeIATA != Destination.CodeIATA)
+                if (origin.CodeIATA != destination.CodeIATA)
                 {
-                    priceBase.Destination = Destination;
+                    priceBase.Destination = destination;
                     priceBase.Origin = origin;
                     _priceBaseService.Create(priceBase);
                 }
