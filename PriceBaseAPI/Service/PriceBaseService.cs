@@ -22,7 +22,11 @@ namespace PriceBaseAPI.Service
         public PriceBase Get(string id) =>
             _priceBase.Find<PriceBase>(priceBase => priceBase.Id == id).FirstOrDefault();
 
- 
+
+        public PriceBase GetBookingPriBase(string destination, string origin) =>
+           _priceBase.Find<PriceBase>(priceBase => priceBase.Destination.CodeIATA == destination && priceBase.Origin.CodeIATA == origin).FirstOrDefault();
+
+
         public PriceBase Create(PriceBase priceBase)
         {    
             _priceBase.InsertOne(priceBase);

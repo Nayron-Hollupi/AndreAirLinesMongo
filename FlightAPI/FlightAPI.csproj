@@ -12,6 +12,9 @@
   <ItemGroup>
     <ProjectReference Include="..\AuthenticationAPI\AuthenticationAPI.csproj" />
     <ProjectReference Include="..\Model\Model.csproj" />
+    <ProjectReference Include="..\ServicceAircraft\ServicceAircraft.csproj" />
+    <ProjectReference Include="..\ServicePassenger\ServicePassenger.csproj" />
+    <ProjectReference Include="..\Service\Service.csproj" />
   </ItemGroup>
 
 </Project>

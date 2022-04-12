@@ -22,6 +22,10 @@ namespace FlightsAPI.Service
         public Flights Get(string id) =>
             _fight.Find<Flights>(fight => fight.Id == id).FirstOrDefault();
 
+        public Flights GetBooking(string destination , string origin) =>
+           _fight.Find<Flights>(fight => fight.Destination.CodeIATA == destination && fight.Origin.CodeIATA == origin).FirstOrDefault();
+      
+
         public Flights Create(Flights fight)
         {
 

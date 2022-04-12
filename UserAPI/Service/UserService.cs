@@ -5,7 +5,7 @@ using UserAPI.Utils;
 
 namespace UserAPI.Service
 {
-    public class UserService 
+    public class UserService : IUserService
     {
         private readonly IMongoCollection<User> _user;
 

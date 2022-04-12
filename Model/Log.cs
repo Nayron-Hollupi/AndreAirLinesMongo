@@ -14,7 +14,7 @@ namespace Model
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
-        public User User { get; set; }
+        public Passenger User { get; set; }
         public string EntityBefore { get; set; }
         public string EntityAfter { get; set; }
         public string Operation { get; set; }

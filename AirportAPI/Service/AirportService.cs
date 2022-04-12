@@ -26,7 +26,7 @@ namespace AeroportoAPI.Service
         public Airport GetCodeIATA(string CodeIATA) =>
            _airport.Find<Airport>(airport => airport.CodeIATA == CodeIATA).FirstOrDefault();
         public Airport VerifyCodigoIATA(string CodeIATA, string CEP) =>
-            _airport.Find<Airport>(airport => airport.CodeIATA.ToUpper() == CodeIATA.ToUpper() || airport.Address.CEP == CEP).FirstOrDefault();
+            _airport.Find<Airport>(airport => airport.CodeIATA.ToUpper() == CodeIATA.ToUpper() || airport.AddressAirport.CEP == CEP).FirstOrDefault();
 
   
 

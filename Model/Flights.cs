@@ -16,7 +16,6 @@ namespace Model
         public Aircraft Aircraft { get; set; }
         public DateTime BoardingTime { get; set; }
         public DateTime LandingTime { get; set; }
-        public User Passenger { get; set; }
         #endregion
     }
 }

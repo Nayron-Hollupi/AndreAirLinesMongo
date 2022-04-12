@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Model;
 using PassengerAPI.Service;
 using Service;
+using ServicePassenger;
 
 namespace PassengerAPI.Controllers
 {
@@ -23,13 +24,13 @@ namespace PassengerAPI.Controllers
 
         [HttpGet]
         [Authorize(Roles = "employee,manager")]
-        public ActionResult<List<User>> Get() =>
+        public ActionResult<List<Passenger>> Get() =>
             _passengerService.Get();
 
 
         [HttpGet("{id:length(24)}", Name = "GetPassenger")]
         [Authorize(Roles = "employee,manager")]
-        public ActionResult<User> Get(string id)
+        public ActionResult<Passenger> Get(string id)
         {
             var passenger = _passengerService.Get(id);
 
@@ -41,9 +42,22 @@ namespace PassengerAPI.Controllers
             return passenger;
         }
 
+
+        [HttpGet("{CodePassenger}", Name = "GetCodePassenger")]
+        [AllowAnonymous]
+        public async Task<ActionResult<Passenger>> GetCodeBooking(string codePassenger)
+        {
+            var passenger = await  ServiceSeachPassenger.SeachPassenger(codePassenger);
+
+            if (passenger == null)
+                return NotFound("Passenger no Exist");
+
+            return  passenger;
+        }
+
         [HttpPost]
         [Authorize(Roles = "employee,manager")]
-        public  async Task<ActionResult<User>> Create(User passenger)
+        public  async Task<ActionResult<Passenger>> Create(Passenger passenger)
         {
             var cpf = _passengerService.ExistCPF(passenger.CPF);
             var check = _passengerService.CheckCpf(passenger.CPF);
@@ -77,7 +91,7 @@ namespace PassengerAPI.Controllers
 
         [HttpPut("{id:length(24)}")]
         [Authorize(Roles = "employee,manager")]
-        public IActionResult Update(string id, User passengerIn)
+        public IActionResult Update(string id, Passenger passengerIn)
         {
             var passenger = _passengerService.Get(id);
 

@@ -7,7 +7,7 @@ using AircraftAPI.Utils;
 
 namespace AircraftAPI.Service
 {
-    public class AircraftService
+    public class AircraftService : IAircraftService
     {
 
         private readonly IMongoCollection<Aircraft> _aircraft;
@@ -29,6 +29,9 @@ namespace AircraftAPI.Service
 
         public Aircraft CheckRegistro(string Registry) =>
             _aircraft.Find<Aircraft>(aircraft => aircraft.Registry == Registry).FirstOrDefault();
+
+        public Aircraft GetRegistry(string Registry) =>
+       _aircraft.Find<Aircraft>(aircraft => aircraft.Registry == Registry).FirstOrDefault();
 
         public Aircraft Create(Aircraft aircraft)
         {
